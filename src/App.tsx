@@ -287,10 +287,21 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col items-center">
-      <header className="w-full bg-blue-700 text-white shadow-md p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold tracking-tight">Help4U Analisador de Planogramas</h1>
-          <p className="text-blue-100 mt-2">Identifique produtos faltantes em seus mini mercados</p>
+      <header className="w-full bg-[#08233e] border-b border-[#06182b] py-4 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 100% 100%, #1178b5 0%, transparent 50%)' }} />
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4 relative z-10">
+          <img 
+            src="https://help4u.com.br/wp-content/uploads/2025/07/Help4u-v2-1-scaled.png" 
+            alt="Help4U Logo" 
+            className="h-12 object-contain"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://help4u.com.br/wp-content/uploads/2025/07/Captura_de_Tela_2025-07-22_as_22.41.22-removebg-preview.png';
+            }}
+          />
+          <div className="sm:ml-4 sm:border-l sm:border-white/20 sm:pl-4 text-center sm:text-left">
+            <h1 className="text-2xl font-bold text-white">Analisador de Planogramas</h1>
+            <p className="text-[#8ed1fc] text-sm font-medium">Gestão inteligente de produtos faltantes</p>
+          </div>
         </div>
       </header>
 
@@ -298,13 +309,13 @@ const App: React.FC = () => {
         
         {/* Upload Section */}
         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-            <UploadCloud className="text-blue-600" /> Importar Dados
+          <h2 className="text-xl font-semibold text-[#08233e] mb-6 flex items-center gap-2">
+            <UploadCloud className="text-[#1178b5]" /> Importar Dados
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="font-medium text-sm text-gray-700">Planilha de Planogramas</label>
+              <label className="font-medium text-sm text-[#08233e]">Planilha de Planogramas</label>
               <div className="relative group">
                 <input 
                   type="file" 
@@ -312,7 +323,7 @@ const App: React.FC = () => {
                   onChange={handlePlanogramasUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                 />
-                <div className={`p-4 border-2 border-dashed rounded-lg flex items-center gap-3 transition-colors ${planogramasFile ? 'border-green-500 bg-green-50' : 'border-gray-300 group-hover:border-blue-400 bg-gray-50'}`}>
+                <div className={`p-4 border-2 border-dashed rounded-lg flex items-center gap-3 transition-colors ${planogramasFile ? 'border-[#1178b5] bg-[#f0f7fb]' : 'border-gray-300 group-hover:border-[#1178b5] bg-gray-50'}`}>
                   <FileSpreadsheet className={planogramasFile ? 'text-green-600' : 'text-gray-400'} size={24} />
                   <div className="flex-1 truncate">
                     <p className="text-sm font-medium text-gray-700 truncate">
@@ -324,7 +335,7 @@ const App: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="font-medium text-sm text-gray-700">Planilha de Produtos</label>
+              <label className="font-medium text-sm text-[#08233e]">Planilha de Produtos</label>
               <div className="relative group">
                 <input 
                   type="file" 
@@ -332,7 +343,7 @@ const App: React.FC = () => {
                   onChange={handleProdutosUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                 />
-                <div className={`p-4 border-2 border-dashed rounded-lg flex items-center gap-3 transition-colors ${produtosFile ? 'border-green-500 bg-green-50' : 'border-gray-300 group-hover:border-blue-400 bg-gray-50'}`}>
+                <div className={`p-4 border-2 border-dashed rounded-lg flex items-center gap-3 transition-colors ${produtosFile ? 'border-[#1178b5] bg-[#f0f7fb]' : 'border-gray-300 group-hover:border-[#1178b5] bg-gray-50'}`}>
                   <FileSpreadsheet className={produtosFile ? 'text-green-600' : 'text-gray-400'} size={24} />
                   <div className="flex-1 truncate">
                     <p className="text-sm font-medium text-gray-700 truncate">
@@ -348,7 +359,7 @@ const App: React.FC = () => {
             <button 
               onClick={parseExcelFiles}
               disabled={!produtosFile || !planogramasFile || isProcessing}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-all flex items-center gap-2"
+              className="bg-[#1178b5] hover:bg-[#0c5987] disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-all flex items-center gap-2"
             >
               {isProcessing ? (
                 <>Processando...</>
@@ -366,23 +377,23 @@ const App: React.FC = () => {
         {marketsList.length > 0 && (
           <section className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[800px]">
             {mappingInfo && (
-              <div className="mx-6 mt-6 p-4 bg-blue-50 text-blue-800 border border-blue-200 rounded-lg text-sm flex gap-2 flex-col">
-                <h3 className="font-semibold text-blue-900 border-b border-blue-200 pb-2 mb-1 flex items-center gap-2">
+              <div className="mx-6 mt-6 p-4 bg-[#f0f7fb] text-gray-800 border border-[#c3e1f3] rounded-lg text-sm flex gap-2 flex-col">
+                <h3 className="font-semibold text-[#08233e] border-b border-[#c3e1f3] pb-2 mb-1 flex items-center gap-2">
                   <Search size={16} /> Diagnóstico de Leitura (Como Busquei os Dados)
                 </h3>
                 <p>Caso algum valor não bata, verifique se a coluna identificada está correta:</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
                   <div>
-                    <strong className="text-blue-900">Planilha: Produtos</strong>
+                    <strong className="text-[#1178b5]">Planilha: Produtos</strong>
                     <ul className="list-disc pl-5 opacity-90 mt-1 space-y-1">
                       <li>Cabeçalho: <strong>Linha {mappingInfo.prodHeaderRow}</strong></li>
                       <li>Código: <strong>Coluna {mappingInfo.prodCodCol}</strong></li>
                       <li>Nome: <strong>Coluna {mappingInfo.prodNomeCol}</strong></li>
-                      <li>Preço de Custo: <strong className="text-blue-900 bg-blue-200/50 px-1 py-0.5 rounded">Coluna {mappingInfo.prodCustoCol}</strong></li>
+                      <li>Preço de Custo: <strong className="text-gray-900 bg-white/60 px-1.5 py-0.5 rounded">Coluna {mappingInfo.prodCustoCol}</strong></li>
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-blue-900">Planilha: Planogramas</strong>
+                    <strong className="text-[#1178b5]">Planilha: Planogramas</strong>
                     <ul className="list-disc pl-5 opacity-90 mt-1 space-y-1">
                       <li>Cabeçalho: <strong>Linha {mappingInfo.planHeaderRow}</strong></li>
                       <li>Código: <strong>Coluna {mappingInfo.planCodCol}</strong></li>
@@ -393,7 +404,7 @@ const App: React.FC = () => {
             )}
 
             <div className="p-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-[#08233e] flex items-center gap-2">
                 Resultados ({missingProductsData.length})
               </h2>
 
@@ -402,7 +413,7 @@ const App: React.FC = () => {
                 <div className="relative">
                   <button 
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex justify-between items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 min-w-[200px]"
+                    className="flex justify-between items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 min-w-[200px] text-gray-700"
                   >
                     <span>
                       {isAllMarketsSelected ? 'Todos os mercados' : `${selectedMarkets.size} mercado(s) selecionado(s)`}
@@ -417,10 +428,10 @@ const App: React.FC = () => {
                         <div className="p-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                           <button 
                             onClick={toggleAllMarkets}
-                            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 p-2 rounded-md hover:bg-blue-50 transition w-full"
+                            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-[#1178b5] p-2 rounded-md hover:bg-[#f0f7fb] transition w-full"
                           >
                             {isAllMarketsSelected ? (
-                              <CheckSquare className="text-blue-600" size={18} />
+                              <CheckSquare className="text-[#1178b5]" size={18} />
                             ) : (
                               <Square className="text-gray-400" size={18} />
                             )}
@@ -432,10 +443,10 @@ const App: React.FC = () => {
                             <button
                                key={market.name}
                                onClick={() => toggleMarket(market.name)}
-                               className="flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 p-2 w-full text-left rounded-md transition"
+                               className="flex items-center gap-2 text-sm text-gray-700 hover:bg-[#f0f7fb] p-2 w-full text-left rounded-md transition"
                             >
                               {selectedMarkets.has(market.name) ? (
-                                <CheckSquare className="text-blue-600" size={18} />
+                                <CheckSquare className="text-[#1178b5]" size={18} />
                               ) : (
                                 <Square className="text-gray-400" size={18} />
                               )}
@@ -450,7 +461,7 @@ const App: React.FC = () => {
 
                 <button 
                   onClick={exportToExcel}
-                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm"
+                  className="flex items-center gap-2 bg-[#08233e] hover:bg-[#06182b] text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm"
                 >
                   <Download size={18} />
                   Exportar
@@ -460,15 +471,15 @@ const App: React.FC = () => {
 
             <div className="flex-1 overflow-auto bg-gray-50 border-t border-gray-200">
               <table className="w-full text-left border-collapse text-sm">
-                <thead className="bg-white sticky top-0 z-10 shadow-sm ring-1 ring-gray-200">
+                <thead className="bg-[#08233e] text-white sticky top-0 z-10 shadow-sm ring-1 ring-[#08233e]">
                   <tr>
-                    <th className="px-4 py-3 font-semibold text-gray-600">Mercado</th>
-                    <th className="px-4 py-3 font-semibold text-gray-600">Código</th>
-                    <th className="px-4 py-3 font-semibold text-gray-600 w-1/4">Produto</th>
-                    <th className="px-4 py-3 font-semibold text-gray-600 text-right">Preço Custo</th>
-                    <th className="px-4 py-3 font-semibold text-blue-700 text-right bg-blue-50/50">Preço Sugerido</th>
-                    <th className="px-4 py-3 font-semibold text-gray-600 text-right">Mgm (20%)</th>
-                    <th className="px-4 py-3 font-semibold text-gray-600 text-right">Mgm (27%)</th>
+                    <th className="px-4 py-3 font-semibold">Mercado</th>
+                    <th className="px-4 py-3 font-semibold">Código</th>
+                    <th className="px-4 py-3 font-semibold w-1/4">Produto</th>
+                    <th className="px-4 py-3 font-semibold text-right">Preço Custo</th>
+                    <th className="px-4 py-3 font-semibold text-right bg-[#06182b]">Preço Sugerido</th>
+                    <th className="px-4 py-3 font-semibold text-right">Mgm (20%)</th>
+                    <th className="px-4 py-3 font-semibold text-right">Mgm (27%)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -480,12 +491,12 @@ const App: React.FC = () => {
                     </tr>
                   ) : (
                     missingProductsData.map((row, idx) => (
-                      <tr key={idx} className="bg-white hover:bg-gray-50 transition-colors">
+                      <tr key={idx} className="bg-white hover:bg-[#f0f7fb]/60 transition-colors">
                         <td className="px-4 py-2 font-medium text-gray-800 border-x border-gray-100">{row.mercado}</td>
                         <td className="px-4 py-2 text-gray-500 font-mono text-xs border-r border-gray-100">{row.codigo}</td>
                         <td className="px-4 py-2 text-gray-700 truncate border-r border-gray-100" title={row.produto}>{row.produto}</td>
                         <td className="px-4 py-2 text-right text-gray-600 border-r border-gray-100">{formatCurrency(row.precoCusto)}</td>
-                        <td className="px-4 py-2 text-right font-medium text-blue-700 bg-blue-50/30 border-r border-gray-100">{formatCurrency(row.precoSugerido)}</td>
+                        <td className="px-4 py-2 text-right font-semibold text-[#095785] bg-[#f0f7fb] border-r border-gray-100">{formatCurrency(row.precoSugerido)}</td>
                         <td className="px-4 py-2 text-right text-gray-600 border-r border-gray-100">
                           {row.precoSugerido > 0 ? (
                             <span className={row.margem20 < 0 ? 'text-red-500' : 'text-green-600'}>
