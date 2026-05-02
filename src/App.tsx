@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
-import { UploadCloud, FileSpreadsheet, Download, Search, CheckSquare, Square } from 'lucide-react';
+import { UploadCloud, FileSpreadsheet, Download, Search, CheckSquare, Square, EyeOff, RotateCcw } from 'lucide-react';
 
 interface Product {
   codigo: string;
@@ -52,6 +52,7 @@ const App: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mappingInfo, setMappingInfo] = useState<MappingInfo | null>(null);
+  const [ignoredItems, setIgnoredItems] = useState<Set<string>>(new Set());
 
   const handleProdutosUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -236,6 +237,23 @@ const App: React.FC = () => {
     return data;
   }, [marketsList, productsList, selectedMarkets]);
 
+  const visibleProducts = useMemo(() => {
+    return missingProductsData.filter(row => !ignoredItems.has(`${row.mercado}|${row.codigo}`));
+  }, [missingProductsData, ignoredItems]);
+
+  const toggleIgnore = (mercado: string, codigo: string) => {
+    const key = `${mercado}|${codigo}`;
+    const next = new Set(ignoredItems);
+    if (next.has(key)) {
+      next.delete(key);
+    } else {
+      next.add(key);
+    }
+    setIgnoredItems(next);
+  };
+
+  const clearIgnored = () => setIgnoredItems(new Set());
+
   const toggleMarket = (marketName: string) => {
     const next = new Set(selectedMarkets);
     if (next.has(marketName)) {
@@ -263,9 +281,9 @@ const App: React.FC = () => {
   };
 
   const exportToExcel = () => {
-    if (missingProductsData.length === 0) return;
+    if (visibleProducts.length === 0) return;
 
-    const exportData = missingProductsData.map(row => ({
+    const exportData = visibleProducts.map(row => ({
       'Mercado': row.mercado,
       'Código': row.codigo,
       'Produto': row.produto,
@@ -404,9 +422,21 @@ const App: React.FC = () => {
             )}
 
             <div className="p-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h2 className="text-xl font-semibold text-[#08233e] flex items-center gap-2">
-                Resultados ({missingProductsData.length})
-              </h2>
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-semibold text-[#08233e] flex items-center gap-2">
+                  Resultados ({visibleProducts.length})
+                </h2>
+                
+                {ignoredItems.size > 0 && (
+                  <button 
+                    onClick={clearIgnored}
+                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-[#1178b5] bg-gray-100 hover:bg-[#f0f7fb] px-3 py-1.5 rounded-full transition-colors font-medium border border-gray-200 hover:border-[#c3e1f3]"
+                  >
+                    <RotateCcw size={14} />
+                    Restaurar {ignoredItems.size} ocultados
+                  </button>
+                )}
+              </div>
 
               <div className="flex items-center gap-3">
                 {/* Custom Multi-Select Dropdown */}
@@ -480,17 +510,18 @@ const App: React.FC = () => {
                     <th className="px-4 py-3 font-semibold text-right bg-[#06182b]">Preço Sugerido</th>
                     <th className="px-4 py-3 font-semibold text-right">Mgm (20%)</th>
                     <th className="px-4 py-3 font-semibold text-right">Mgm (27%)</th>
+                    <th className="px-4 py-3 font-semibold text-center w-12"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {missingProductsData.length === 0 ? (
+                  {visibleProducts.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-4 py-12 text-center text-gray-500 bg-white">
+                      <td colSpan={8} className="px-4 py-12 text-center text-gray-500 bg-white">
                         Nenhum produto faltante encontrado para a seleção atual.
                       </td>
                     </tr>
                   ) : (
-                    missingProductsData.map((row, idx) => (
+                    visibleProducts.map((row, idx) => (
                       <tr key={idx} className="bg-white hover:bg-[#f0f7fb]/60 transition-colors">
                         <td className="px-4 py-2 font-medium text-gray-800 border-x border-gray-100">{row.mercado}</td>
                         <td className="px-4 py-2 text-gray-500 font-mono text-xs border-r border-gray-100">{row.codigo}</td>
@@ -510,6 +541,15 @@ const App: React.FC = () => {
                               {formatPercent(row.margem27)}
                             </span>
                           ) : '-'}
+                        </td>
+                        <td className="px-2 py-2 text-center">
+                          <button 
+                            onClick={() => toggleIgnore(row.mercado, row.codigo)}
+                            className="text-gray-400 hover:text-red-500 p-1.5 rounded-md hover:bg-red-50 transition-colors"
+                            title="Ocultar produto"
+                          >
+                            <EyeOff size={16} />
+                          </button>
                         </td>
                       </tr>
                     ))
